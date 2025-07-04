@@ -19,7 +19,7 @@ namespace DataAccess.DAO
 
         private SqlDao()
         {
-            _connectionString = @"Data Source=srv-sqldatabase-billetico.database.windows.net;Initial Catalog=cenfocinemas-db;User ID=sysadmin;Password=BilleTico123!;Trust Server Certificate=True";
+            _connectionString = @"Data Source=srv-sqldatabase-billetico.database.windows.net;Initial Catalog=billetico-db;User ID=sysadmin;Password=BilleTico123!;Trust Server Certificate=True";
         }
 
         //Paso 3: Definir el metodo que expondrá la instancia de la clase SqlDao.
