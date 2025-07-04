@@ -8,22 +8,22 @@ namespace DTOs
 {
     public class Commerce : BaseDTO
     {
-        public string legalEntity { get; set; }
+        public string LegalId { get; set; }
 
-        public string name { get; set; }
+        public string Name { get; set; }
 
-        public string phone { get; set; }
+        public string Phone { get; set; }
 
-        public string email { get; set; }
+        public string Email { get; set; }
 
-        public decimal latitude { get; set; }
+        public decimal Latitude { get; set; }
 
-        public decimal longitude { get; set; }
+        public decimal Longitude { get; set; }
 
-        public string status { get; set; }
+        public string Status { get; set; }
 
         public string IBAN { get; set; }
 
-        public decimal commissionRate { get; set; }
+        public decimal CommissionRate { get; set; }
     }
 }

@@ -9,6 +9,7 @@ CREATE TABLE [dbo].[TBL_Commerce](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Created] [datetime] NOT NULL,
 	[Updated] [datetime] NULL,
+	[LegalId] [varchar](12) NOT NULL,
 	[Name] [varchar](30) NOT NULL,
 	[Phone] [varchar](8) NOT NULL,
 	[Email] [varchar](100) NOT NULL,

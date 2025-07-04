@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,5 +39,9 @@ namespace DataAccess.DAO
             Parameters.Add(new SqlParameter(paramName, paramValue));
         }
 
+        public void AddDecimalParameter(string paramName, decimal paramValue)
+        {
+            Parameters.Add(new SqlParameter(paramName, paramValue));
+        }
     }
 }
