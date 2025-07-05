@@ -25,13 +25,97 @@ namespace DataAccess.CRUD
             sqlOperation.AddStringParameter("P_Name", commerce.Name);
             sqlOperation.AddStringParameter("P_Phone", commerce.Phone);
             sqlOperation.AddStringParameter("P_Email", commerce.Email);
-            sqlOperation.AddDecimalParameter("P_Latitude", commerce.Latitude);
-            sqlOperation.AddDecimalParameter("P_Longitude", commerce.Longitude);
+            sqlOperation.AddDoubleParam("P_Latitude", (double)commerce.Latitude);
+            sqlOperation.AddDoubleParam("P_Longitude", (double)commerce.Longitude);
             sqlOperation.AddStringParameter("P_Status", commerce.Status);
             sqlOperation.AddStringParameter("P_IBAN", commerce.IBAN);
-            sqlOperation.AddDecimalParameter("P_CommissionRate", commerce.CommissionRate);
 
-            throw new NotImplementedException();
+            _sqlDao.ExecuteProcedure(sqlOperation);
+        }
+
+        public List<T> RetrieveByStatus<T>(string status)
+        {
+            var lstCommerce = new List<T>();
+            var sqlOperation = new SqlOperation() { ProcedureName = "RET_COMMERCE_BY_STATUS_PR" };
+            sqlOperation.AddStringParameter("P_Status", status);
+            var lstResults = _sqlDao.ExecuteQueryProcedure(sqlOperation);
+
+            if (lstResults.Count > 0)
+            {
+                foreach (var row in lstResults)
+                {
+                    var commerce = BuildCommerce(row);
+                    lstCommerce.Add((T)Convert.ChangeType(commerce, typeof(T)));
+                }
+            }
+            return lstCommerce;
+        }
+
+        public override T RetrieveById<T>(int id)
+        {
+            var sqlOperation = new SqlOperation() { ProcedureName = "RET_COMMERCE_BY_ID_PR" };
+            sqlOperation.AddIntParam("P_Id", id);
+            var lstResults = _sqlDao.ExecuteQueryProcedure(sqlOperation);
+
+            if (lstResults.Count > 0)
+            {
+                var row = lstResults[0];
+                var commerce = BuildCommerce(row);
+                return (T)Convert.ChangeType(commerce, typeof(T));
+            }
+
+            return default(T);
+        }
+
+        public void ApproveCommerce(int commerceId, decimal commissionRate)
+        {
+            var sqlOperation = new SqlOperation() { ProcedureName = "APPROVE_COMMERCE_PR" };
+            sqlOperation.AddIntParam("P_Id", commerceId);
+            sqlOperation.AddDoubleParam("P_CommissionRate", (double)commissionRate);
+
+            _sqlDao.ExecuteProcedure(sqlOperation);
+        }
+
+        public void RejectCommerce(int commerceId)
+        {
+            var sqlOperation = new SqlOperation() { ProcedureName = "REJECT_COMMERCE_PR" };
+            sqlOperation.AddIntParam("P_Id", commerceId);
+
+            _sqlDao.ExecuteProcedure(sqlOperation);
+        }
+
+        public T RetrieveByLegalId<T>(Commerce commerce)
+        {
+            var sqlOperation = new SqlOperation() { ProcedureName = "RET_COMMERCE_BY_LEGAL_ID_PR" };
+            sqlOperation.AddStringParameter("P_LegalId", commerce.LegalId);
+
+            var lstResults = _sqlDao.ExecuteQueryProcedure(sqlOperation);
+
+            if (lstResults.Count > 0)
+            {
+                var row = lstResults[0];
+                commerce = BuildCommerce(row);
+
+                return (T)Convert.ChangeType(commerce, typeof(T));
+            }
+            return default(T);
+        }
+
+        public T RetrieveByIBAN<T>(Commerce commerce)
+        {
+            var sqlOperation = new SqlOperation() { ProcedureName = "RET_COMMERCE_BY_IBAN_PR" };
+            sqlOperation.AddStringParameter("P_IBAN", commerce.IBAN);
+
+            var lstResults = _sqlDao.ExecuteQueryProcedure(sqlOperation);
+
+            if (lstResults.Count > 0)
+            {
+                var row = lstResults[0];
+                commerce = BuildCommerce(row);
+
+                return (T)Convert.ChangeType(commerce, typeof(T));
+            }
+            return default(T);
         }
 
         public override void Delete(BaseDTO baseDTO)
@@ -49,11 +133,6 @@ namespace DataAccess.CRUD
             throw new NotImplementedException();
         }
 
-        public override T RetrieveById<T>(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Update(BaseDTO baseDTO)
         {
             throw new NotImplementedException();
@@ -65,16 +144,16 @@ namespace DataAccess.CRUD
             {
                 Id = (int)row["Id"],
                 Created = (DateTime)row["Created"],
-                //Updated = (DateTime)row["Updated"],
+                Updated = row["Updated"] == DBNull.Value || row["Updated"] == null ? DateTime.MinValue : (DateTime)row["Updated"],
                 LegalId = (string)row["LegalId"],
                 Name = (string)row["Name"],
                 Phone = (string)row["Phone"],
                 Email = (string)row["Email"],
-                Latitude = (decimal)row["Latitude"],
-                Longitude = (decimal)row["Longitude"],
+                Latitude = Convert.ToDecimal(row["Latitude"]),
+                Longitude = Convert.ToDecimal(row["Longitude"]),
                 Status = (string)row["Status"],
                 IBAN = (string)row["IBAN"],
-                CommissionRate = (decimal)row["CommissionRate"]
+                CommissionRate = row["CommissionRate"] != DBNull.Value ? Convert.ToDecimal(row["CommissionRate"]) : 0.00m
             };
             return commerce;
         }
