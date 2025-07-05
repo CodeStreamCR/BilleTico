@@ -13,9 +13,6 @@ namespace DataAccess.CRUD
 
         protected SqlDao _sqlDao;
 
-        // Definir los metodos que forman parte del contrato de la clase CrudFactory.
-        // C = Create, R = Retrieve, U = Update, D = Delete
-
         public abstract void Create(BaseDTO baseDTO);
 
         public abstract void Update(BaseDTO baseDTO);

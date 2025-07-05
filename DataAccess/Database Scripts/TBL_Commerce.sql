@@ -9,14 +9,15 @@ CREATE TABLE [dbo].[TBL_Commerce](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Created] [datetime] NOT NULL,
 	[Updated] [datetime] NULL,
-	[Name] [varchar](30) NOT NULL,
-	[Phone] [varchar](8) NOT NULL,
-	[Email] [varchar](100) NOT NULL,
+	[LegalId] [nvarchar](12) NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+	[Phone] [nvarchar](8) NOT NULL,
+	[Email] [nvarchar](100) NOT NULL,
 	[Latitude] [decimal](9, 6) NOT NULL,
 	[Longitude] [decimal](9, 6) NOT NULL,
-	[Status] [varchar](10) NOT NULL,
-	[IBAN] [varchar](22) NOT NULL,
-	[CommissionRate] [decimal](5, 2) NOT NULL,
+	[Status] [nvarchar](15) NOT NULL,
+	[IBAN] [nvarchar](22) NOT NULL,
+	[CommissionRate] [decimal](5, 2) NULL,
  CONSTRAINT [PK_TBL_Commerce] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
